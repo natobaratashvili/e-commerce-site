@@ -57,6 +57,7 @@ const productsContainer = document.getElementById('cards-container');
 displayProducts(products);
 attachAddToCartListeners(products);
 displayCartItems();
+updateCartSummary();
 
 function displayProducts(products) {
     try {
@@ -159,15 +160,15 @@ filterInput.addEventListener('input', () => {
 
 
 function addToCart(product) {
-    const existingProductIndex = window.cart.findIndex(item => item.id === product.id);
+    const existingProductIndex = cart.findIndex(item => item.id === product.id);
 
     if (existingProductIndex !== -1) {
-        window.cart[existingProductIndex].count += 1;
+        cart[existingProductIndex].count += 1;
     } else {
         product.count = 1;
-        window.cart.push(product);
+        cart.push(product);
     }
-
+    updateCartSummary();
     console.log(cart);
 }
 
@@ -175,8 +176,8 @@ function addToCart(product) {
 function displayCartItems() {
     try{
     const cartContainer = document.querySelector('.cards-container-cart');
-    console.log(window.cart)
-    if (window.cart.length === 0) {
+    console.log(cart)
+    if (cart.length === 0) {
         const noItemsMessage = document.createElement('p');
         noItemsMessage.textContent = 'Your cart is empty!';
         cartContainer.appendChild(noItemsMessage);
@@ -185,7 +186,7 @@ function displayCartItems() {
 
     cartContainer.innerHTML = ''; 
 
-    window.cart.forEach((cartItem, index) => {
+    cart.forEach((cartItem, index) => {
         const cartCard = document.createElement('div');
         cartCard.classList.add('card');
         cartCard.id = `cart-item-${index + 1}`;
@@ -237,12 +238,28 @@ function displayCartItems() {
     }
 }
 
-/**
- * Removes a cart item by index and updates the display
- * @param {number} index - Index of the cart item to remove
- */
 function removeCartItem(index) {
-    window.cart.splice(index, 1); // Remove the item from the cart array
+    cart.splice(index, 1); // Remove the item from the cart array
     displayCartItems(); // Re-render the cart items
+    updateCartSummary();
 }
 
+
+
+
+function updateCartSummary() {
+    try {
+        let totalPrice = 0;
+
+        cart.forEach(product => {
+            totalPrice += product.price * product.count;
+        });
+    
+        // Update the total price in the cart summary
+        const totalPriceElement = document.getElementById('total-price');
+        totalPriceElement.textContent = totalPrice.toFixed(2);  // Format to 2 decimal places
+    } catch(error){
+
+    }
+   
+}
