@@ -53,6 +53,7 @@ const products = [
 
 console.log(products);
 const productsContainer = document.getElementById('cards-container');
+loadCartFromStorage();
 
 displayProducts(products);
 attachAddToCartListeners(products);
@@ -183,6 +184,7 @@ function displayCartItems() {
     try{
     const cartContainer = document.querySelector('.cards-container-cart');
     console.log(cart)
+    cartContainer.innerHTML = ''; 
     if (cart.length === 0) {
         const noItemsMessage = document.createElement('p');
         noItemsMessage.textContent = 'Your cart is empty!';
@@ -190,7 +192,6 @@ function displayCartItems() {
         return;
     }
 
-    cartContainer.innerHTML = ''; 
 
     cart.forEach((cartItem, index) => {
         const cartCard = document.createElement('div');
@@ -264,7 +265,7 @@ function updateCartSummary() {
     
         // Update the total price in the cart summary
         const totalPriceElement = document.getElementById('total-price');
-        totalPriceElement.textContent = totalPrice.toFixed(2);  // Format to 2 decimal places
+        totalPriceElement.textContent = `Total Price: $${totalPrice.toFixed(2)}`;  // Format to 2 decimal places
     } catch(error){
 
     }
@@ -286,4 +287,3 @@ function loadCartFromStorage() {
 }
 
 // Load the cart when the page loads
-loadCartFromStorage();
