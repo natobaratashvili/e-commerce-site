@@ -135,6 +135,11 @@ function filterProductsByName(products, searchQuery) {
 }
 
 
+function saveCartToStorage() {
+    // Save the cart array as a JSON string
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+}
+
 
 try {
     const filterInput = document.getElementById('product-filter-input');
@@ -169,6 +174,7 @@ function addToCart(product) {
         cart.push(product);
     }
     updateCartSummary();
+    saveCartToStorage(); 
     console.log(cart);
 }
 
@@ -241,6 +247,7 @@ function displayCartItems() {
 function removeCartItem(index) {
     cart.splice(index, 1); // Remove the item from the cart array
     displayCartItems(); // Re-render the cart items
+    saveCartToStorage(); 
     updateCartSummary();
 }
 
@@ -263,3 +270,20 @@ function updateCartSummary() {
     }
    
 }
+
+
+function loadCartFromStorage() {
+    const savedCart = sessionStorage.getItem('cart');
+    
+    if (savedCart) {
+        // Parse the saved cart JSON string back into an array
+        cart = JSON.parse(savedCart);
+    } else {
+        cart = [];  // Initialize as empty if no saved cart exists
+    }
+    
+    updateCartSummary();  // Update the cart summary based on the loaded cart
+}
+
+// Load the cart when the page loads
+loadCartFromStorage();
